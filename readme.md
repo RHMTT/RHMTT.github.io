@@ -23,15 +23,20 @@ If your experience is different in schedulung these workshops, please let us kno
 
 ## Exercises
 
-- [Exercise 1 - Intro and configuration of Ansible Tower](1-1-tower)
-- [Exercise 2 - Ad-hoc commands](1-2-adhoc)
-- [Exercise 3 - Intro to playbooks](1-3-playbook)
-- [Exercise 4 - Ansible Tower projects](1-4-projects)
-- [Exercise 5 - Setting up GitLab](1-5-gitlab)
-- [Exercise 6 - Ansible roles](1-6-roles)
-- [Exercise 7 - Creating Workflows](1-7-workflows)
-- [Exercise 8 - Setting up Jenkins](2-1-jenkins)
-- [Exercise 9 - Running Tower jobs from Jenkins](2-2-jenkins-run)
-- [Exercise 10 - Adding in Tower jobs into a pipeline](2-3-jenkins-pipeline)
+- [Exercise 1-1 - Intro and configuration of Ansible Tower](1-1-tower)
+- [Exercise 1-2 - Tower Ad-hoc commands](1-2-adhoc)
+- [Exercise 1-3 - Intro to playbooks](1-3-playbook)
+- [Exercise 1-4 - Ansible Tower projects](1-4-projects)
+- [Exercise 1-5 - Ansible roles](1-5-roles)
+- [Exercise 1-6 - Creating Workflows](1-6-workflows)
+- [Exercise 1-7 - Ansible Tower Inventory from Git](1-7-git-inventory)
+- [Exercise 1-7 - Setting up GitLab Token](1-8-gitlab-token)
+- [Exercise 1-8 - Setting up GitLab Webhook](1-9-gitlab)
+- [Exercise 2-1 - Git Commit triggers](2-1-git-commit)
+- [Exercise 2-2 - Git merge triggers](2-2-git-commit)
+- [Exercise 3-1 - Deploy Jenkins](3-1-deploy-jenkins)
+- [Exercise 3-2 - Set up Jenkins to Tower](3-2-Jenkins-Setup-tower)
+- [Exercise 3-3 - Running Tower jobs from Jenkins](3-3-jenkins-run)
+- [Exercise 3-4 - Adding in Tower jobs into a pipeline](3-4-jenkins-pipeline)
 
 
