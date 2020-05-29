@@ -15,302 +15,153 @@ Section 1: Review the role directory structure
 Step 1:
 -------
 
-In Visual Studio Code, navigate to explorer and your *workshop_project* folder there 
-is a sub directory called **apache_tomcat**
+In Visual Studio Code, navigate to explorer and your **workshop_project** folder there is a sub directory called **roles** and you will see a role directory called **tomcat-ansible-role**
 
-![apache\_advanced](images/6-vscode-existing-folders.png)
-
-Select the **apache** folder.
-
-Create a directory called **roles** by right-clicking on **apache**
-and selecting *New Folder*
-
-Now right-click **roles** and create a new folder underneath called
-`apache_simple`.
+![tomcat role](images/tomcat_role.png)
 
 Step 2:
 -------
 
-We want to create a role structure and Ansible can create this for us using the ansible-galaxy command, in VSC click on Terminal at the top and select New Terminal
+We can see how a role has structure associated with it and is self contained.
 
-![apache\_advanced](images/6-vscode-new-terminal.png)
-
-You will see a terminal window at the bottom of VSC, we can now run the following command to have Ansible create the role directory structure for us
-change into the roles directory
-
-`cd cicd-workshop/workshop_project/apache/roles`
-
-Now execute the following ansible-galaxy command
-
-`ansible-galaxy init --offline apache_simple`
-
-![vsc\_galaxy_init](images/6-ansible-galaxy-init.png)
-
-We can see that we now have the full role directory structure created for us.
+default -> Default variables
+handlers: -> the handle tasks we notify
+meta -> information about the role used by Galaxy and Molecule
+molecule -> Testing Framework
+tasks -> The tasks associalted
+templates -> Jinja2 Template files 
+tests -> testing spec files for the role
+vars -> Variables for the role
 
 Step 3:
--------
+---
 
-Within each of these new folders (except templates and files), we can see there is a `main.yml` file pre created for us. The templates and files directory do not have ansible playbooks they are for static files to copy or dynamic templates. This is your basic role structure and
-main.yml will be the default file that the role will use for each
-section.
+Ansible will read a default main.yml for the tasks and handlers, if we go into the tasks/main.yml file we can see we can split this up even more to make it more managable.
 
-Section 2: Breaking Your `site.yml` Playbook into the Newly Created `apache_simple` Role
-=====================================================================================
+![tomcat role main](images/tomcat_role_task_main.png)
 
-In this section, we will separate out the major parts of your playbook
-including `vars:`, `tasks:`, `template:`, and `handlers:`.
+By using the Ansible when conditions we can state when you include the other playbooks.
 
-Step 1:
--------
-
-Make a backup copy of `site.yml`, then create a new `site.yml`.
-
-Navigate to your `iis_advanced` folder, right click `site.yml`, click
-`rename`, and call it `site.yml.backup`
-
-Create a blank new file called `site.yml` in the same folder
-
-Step 2:
--------
-
-Update site.yml to look like to only call your role. It should look like
-below:
-
-```yaml
-    ---
-    - hosts: windows
-      name: This is my role-based playbook
-
-      roles:
-        - iis_simple
-```
-
-![New site.yml](images/6-new-site.png)
-
-Step 3:
--------
-
-Add a default variable to your role. Edit the
-`roles\iis_simple\defaults\main.yml` as follows:
-
-```yaml
-    ---
-    # defaults file for iis_simple
-    iis_sites:
-      - name: 'Ansible Playbook Test'
-        port: '8080'
-        path: 'C:\sites\playbooktest'
-      - name: 'Ansible Playbook Test 2'
-        port: '8081'
-        path: 'C:\sites\playbooktest2'
-```
+If we state tomcat should be present then the install and configure playbooks will run, but if its set as absent then only the uninstall playbook will run.
 
 Step 4:
--------
+---
+Looking at the cofigure.yml file we can see that a condition is set based on if the desired state is for production or not and that we have actually installed.
 
-Add some role-specific variables to your role in
-`roles\iis_simple\vars\main.yml`.
+![tomcat permissions](images/tomcat_role_permissions.png)
 
-```yaml
-    ---
-    # vars file for iis_simple
-    iis_test_message: "Hello World!  My test IIS Server"
-```
-
-> **Note**
->
-> **Hey, wait… did we just put variables in two seperate places?**
->
-> Yes… yes we did. Variables can live in quite a few places. Just to
-> name a few:
->
-> - vars directory
->
-> - defaults directory
->
-> - group\_vars directory
->
-> - In the playbook under the `vars:` section
->
-> - In any file which can be specified on the command line using the
->     `--extra_vars` option
->
-> - On a boat, in a moat, with a goat *(disclaimer: this is a complete
->     lie)*
->
-> Bottom line, you need to read up on [variable
-> precedence](http://docs.ansible.com/ansible/latest/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable)
-> to understand both where to define variables and which locations take
-> precedence. In this exercise, we are using role defaults to define a
-> couple of variables and these are the most malleable. After that, we
-> defined some variables in `/vars` which have a higher precedence than
-> defaults and can’t be overridden as a default variable.
+How else could we make a decision where we would need to set a variable flag?
 
 Step 5:
--------
+---
+The defaults/main.yml file will show all the variables we can use with the role and the default answer if we dont specify it else where.
 
-Create your role handler in `roles\iis_simple\handlers\main.yml`.
+![Tomcat Default Vars](images/tomcat_default_vars.png)
 
-```yaml
-    ---
-    # handlers file for iis_simple
-    - name: restart iis service
-      win_service:
-        name: W3Svc
-        state: restarted
-        start_mode: auto
-```
+We have various options here like the version of Java to install and the ability to not install java if using another role for this, the tomcat default user and group.
+
+The production permissions is set to false by default but we can use this in our group vars to ensure our production boxes would get that.
 
 Step 6:
--------
+---
 
-Add tasks to your role in `roles\iis_simple\tasks\main.yml`.
+We need to create a playbook to be able to use this role, there is a README.md file in the root of the role that gives us much more information on the role variables but also shows us an example playbook.
 
-<!-- {% raw %} -->
+Example Playbook
+----------------
 ```yaml
-    ---
-    # tasks file for iis_simple
-
-    - name: Install IIS
-      win_feature:
-        name: Web-Server
-        state: present
-
-    - name: Create site directory structure
-      win_file:
-        path: "{{ item.path }}"
-        state: directory
-      with_items: "{{ iis_sites }}"
-
-    - name: Create IIS site
-      win_iis_website:
-        name: "{{ item.name }}"
-        state: started
-        port: "{{ item.port }}"
-        physical_path: "{{ item.path }}"
-      with_items: "{{ iis_sites }}"
-      notify: restart iis service
-
-    - name: Open port for site on the firewall
-      win_firewall_rule:
-        name: "iisport{{ item.port }}"
-        enable: yes
-        state: present
-        localport: "{{ item.port }}"
-        action: Allow
-        direction: In
-        protocol: Tcp
-      with_items: "{{ iis_sites }}"
-
-    - name: Template simple web site to iis_site_path as index.html
-      win_template:
-        src: 'index.html.j2'
-        dest: '{{ item.path }}\index.html'
-      with_items: "{{ iis_sites }}"
-
-    - name: Show website addresses
-      debug:
-        msg: "{{ item }}"
-      loop:
-        - http://{{ ansible_host }}:8080
-        - http://{{ ansible_host }}:8081
+- hosts: servers
+  become: true
+  vars:
+    tomcat_version: 8.5.23
+    
+    tomcat_permissions_production: True
+    
+    tomcat_users:
+      - username: "tomcat"
+        password: "t3mpp@ssw0rd"
+        roles: "tomcat,admin,manager,manager-gui"
+      - username: "exampleuser"
+        password: "us3rp@ssw0rd"
+        roles: "tomcat"        
+  roles:
+    - role: tomcat-ansible-role
 ```
-<!-- {% endraw %} -->
+All of these variables would be lifecycle controlled. 
+
+*tomcat_version* this would be controlled as we test and promote.
+
+*tomcat_permissions_production* this would is set to false by default but we would want this to be true for production boxes.
+
+*tomcat_users* this is going to be different per lifecycle
+
+Lets create a playbook by right clicking on the **workshop_project** directory and select new file, and call it install_tomcat.yml
+
+Lets populate it with the following
+
+```yaml
+---
+- name: Install Apache Tomcat
+  hosts: dev,qa,prod
+  
+  roles:
+    - role: tomcat-ansible-role
+```
+Lets also create the uninstall playbook at the same time right click and add a new file called uninstall_tomcat.yml and add in the following
+
+```yaml
+---
+- name: Uninstall Apache Tomcat
+  hosts: dev,qa,prod
+  vars:
+    tomcat_state: absent
+
+  roles:
+    - role: tomcat-ansible-role
+```
+
 
 Step 7:
--------
+---
 
-Add your index.html template.
+Navigate back to our **inventory/group_vars** and create a file called prod and add the following lines
 
-Right-click `roles\iis_simple\templates` and create a new file called
-`index.html.j2` with the following content:
-
-<!-- {% raw %} -->
-```html
-    <html>
-    <body>
-
-      <p align=center><img src='http://docs.ansible.com/images/logo.png' align=center>
-      <h1 align=center>{{ ansible_hostname }} --- {{ iis_test_message }}
-
-    </body>
-    </html>
+```yaml
+tomcat_version: 8.5.23
+tomcat_permissions_production: True
+tomcat_users:
+  - username: "tomcat"
+    password: "T0mC4t321!"
+    roles: "tomcat,admin,manager,manager-gui"
+  - username: "produser"
+    password: "PRuserP4$$"
+    roles: "tomcat"     
 ```
-<!-- {% endraw %} -->
+Edit the qa group_vars file and add in the following
+```yaml
+tomcat_version: 8.5.23
+tomcat_users:
+  - username: "tomcat"
+    password: "TCP@$$w0rd"
+    roles: "tomcat,admin,manager,manager-gui"
+  - username: "qauser"
+    password: "QAuserP4$$"
+    roles: "tomcat"
+```
+finally create a dev file and add the following
+```yaml
+tomcat_version: 8.5.23
+tomcat_users:
+  - username: "tomcat"
+    password: "TCP@$$w0rd"
+    roles: "tomcat,admin,manager,manager-gui"
+  - username: "devuser"
+    password: "DEVuserP4$$"
+    roles: "tomcat"
+```
 
-Now, remember we still have a *templates* folder at the base level of
-this playbook, so we will delete that now. Right click it and Select
-*Delete*.
+![tomcat prod group](images/tomcat_prod_group.png)
 
-Step 8: Commit
---------------
-
-Click File → Save All to ensure all your files are saved.
-
-Click the Source Code icon as shown below (1).
-
-Type in a commit message like `Adding iis_simple role` (2) and click the
-check box above (3).
-
-![Commit iis\_simple\_role](images/6-commit.png)
-
-Click the `synchronize changes` button on the blue bar at the bottom
-left. This should again return with no problems.
-
-Section 3: Running your new playbook
-====================================
-
-Now that you’ve successfully separated your original playbook into a
-role, let’s run it and see how it works. We don’t need to create a new
-template, as we are re-using the one from Exercise 5. When we run the
-template again, it will automatically refresh from git and launch our
-new role.
-
-Step 1:
--------
-
-Before we can modify our Job Template, you must first go resync your
-Project again. So do that now.
-
-Step 2:
--------
-
-Select TEMPLATES
-
-> **Note**
->
-> Alternatively, if you haven’t navigated away from the job templates
-> creation page, you can scroll down to see all existing job templates
-
-Step 3:
--------
-
-Click the rocketship icon ![Add](images/at_launch_icon.png) for the
-**IIS Advanced** Job Template.
-
-Step 4:
--------
-
-When prompted, enter your desired test message
-
-If successful, your standard output should look similar to the figure
-below. Note that most of the tasks return OK because we’ve previously
-configured the servers and services are already running.
-
-![Job output](images/6-job-output.png)
-
-
-When the job has successfully completed, you should see two URLs to your websites printed at the bottom of the job output. Verify they are still working.
-
-Section 5: Review
-=================
-
-You should now have a completed playbook, `site.yml` with a single role
-called `iis_simple`. The advantage of structuring your playbook into
-roles is that you can now add reusability to your playbooks as well as
-simplifying changes to variables, tasks, templates, etc.
-
-[Ansible Galaxy](https://galaxy.ansible.com) is a good repository of
-roles for use or reference.
-  
+Step 8:
+===
+commit the files and push to git.
