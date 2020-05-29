@@ -3,33 +3,26 @@ An Inventory is where you list hosts to which we would connect to along with the
 Overview
 ========
 
-At the end of this section we should have an understanding on how we can create an inventory and populate it with information to be used during a playbook run.
+At the end of this section we should have an understanding on how we can create an inventory and populate it with host and group information as well as present variables, this information will be used during a playbook run.
 
 Section 1: Creating a Directory Structure and Files for your Inventory
 =====================================================================
 
 There is a [best
 practice](https://docs.ansible.com/ansible/latest/network/getting_started/first_inventory.html)
-on setting up inventories. We strongly
-encourage you to read and understand these practices as you develop your
+on setting up inventories. We strongly encourage you to read and understand these practices as you develop your
 Ansible skills.
 
 Step 1:
 ---
-We are going to place this in the same *CICD-WORKSHOP* that we used for our apache playbook earlier. This is not a hard requirement as the inventory could reside in a seperate Project if needed.
+We have already created an inventory directory and a host file for you with your host information inside of it, this can be found in the *workshop_project* directory.
+Navigate to the directory and file and see how we have the hosts assisgned to groups.
 
-Step 2:
----
-Right click on the workshop_project folder and select new folder and call inventory then right click on inventory and create a new file and call the file hosts
 ![Inventory Directory](images/inventory_directory.png)
 
-Step 3:
----
+*Note* If you will use an inventory file set in Source Control it is not a hard requirement to have it in the same repo as the playbooks.
 
-You will see there is a folder in your main directory called  lab_inventory folder with a hosts file inside of it you will copy the contents of that hosts file to your new hosts file
-![Inventory File](images/inventory_file.png)
-
-Step 4:
+Step 2:
 ---
 Next we want to be able to define variables for the groups and hosts, 
 
@@ -40,7 +33,7 @@ Create 2 folders under inventory called
 
 ![Student inventory vars](images/inventory_vars_directory.png)
 
-Step 5:
+Step 3:
 ---
 We will simply create a file in each directory to reference a hostname of a group name
 
@@ -50,15 +43,15 @@ and add in the following key value pair
 
 `apache_test_message: Hello World Welcome to Node1`
 
-under group_vars create a files called web
+under group_vars create a files called qa
 
 and add in the following key value pair
 
-`apache_test_message: Hello World Welcome to the Web Group`
+`apache_test_message: Hello World Welcome to the QA Group`
 
 ![Student inventory vars](images/inventory_vars_files.png)
 
-Step 6:
+Step 4:
 ---
 Make sure all files are saved and commit them to git
 
@@ -89,10 +82,10 @@ go to Inventories and Click the ![Add](images/add.png) icon and add inventory
 Fill out the details as such
 
 
-| Key          | Value           
-|--------------|-----------------|------------------------------------------|
+| Key          | Value             |                                          |
+|--------------|-------------------|------------------------------------------|
 | Name         | Student Inventory |                                          |
-| Organization | Default         |                                          |
+| Organization | Default           |                                          |
 
 Select SAVE ![Save](images/at_save.png) 
 
@@ -103,13 +96,14 @@ Select Sources
 
 Click the ![Add](images/add.png) icon and add inventory source
 
-| Key          | Value           
-|--------------|-----------------|------------------------------------------|
-| NAME         | GitLab Inventory |                                          |
-| SOURCE | Sourced from a Project         |                                          |
-|  CREDENTIAL |  |
-| PROJECT | Ansible Workshop Project |
-| INVENTORY FILE | inventory/hosts |
+| Key            | Value                    |    |
+|----------------|--------------------------|----|
+| NAME           | GitLab Inventory         |    |
+| SOURCE         | Sourced from a Project   |    |
+| CREDENTIAL     |                          |    |
+| PROJECT        | Ansible Workshop Project |    |
+| INVENTORY FILE | inventory/hosts          |    |
+
 UPDATE OPTIONS 
 - [x] OVERWRITE
 - [x] OVERWRITE VARIABLES
@@ -161,8 +155,8 @@ Click on node1 and look at the details we can see this came over from the node1 
 Step 4:
 -------
 
-If you click the **GROUPS** button and then select the **web** group, you can See that the variable we assigned to web has also come down as expected.
+If you click the **GROUPS** button and then select the **qa** group, you can See that the variable we assigned to web has also come down as expected.
 
-![Group](images/web_group.png)
+![Group](images/qa_group.png)
 
 We can use this going forward to specify individual host or group variables to answer our playbooks. We will see how this will perform in the next exercise.
