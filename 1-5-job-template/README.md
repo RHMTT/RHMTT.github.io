@@ -30,17 +30,17 @@ Step 3:
 
 Complete the form using the following values
 
-| Key         | Value                                        | Prompt on Launch |
-|-------------|----------------------------------------------|------|
-| Name        | Apache Basic Job Template                       |      |
-| Description | Template for the apache basic playbook          |      |
-| JOB TYPE    | Run                                          |      |
-| INVENTORY   | Student Inventory                   |      |
-| PROJECT     | Ansible Workshop Project                     |      |
-| PLAYBOOK    | `install_apache.yml`                  |      |
-| CREDENTIAL  | Type: **Machine**. Name: **Student Account** |      |
-| LIMIT       | web                                      | Checked     |
-| OPTIONS     | [*] ENABLE PRIVILEGE ESCALATION                      |      |
+| Key         |Value                                   | Prompt on Launch |
+|-------------|----------------------------------------|------------------|
+| Name        | Apache Basic Job Template              |                  |
+| Description | Template for the apache basic playbook |                  |
+| JOB TYPE    | Run                                    |                  |
+| INVENTORY   | Student Inventory                      |                  |
+| PROJECT     | Ansible Workshop Project               |                  |
+| PLAYBOOK    | `install_apache.yml`                   |                  |
+| CREDENTIAL  | Student Account                        |                  |
+| LIMIT       |                                        | Checked          |
+| OPTIONS     | [*] ENABLE PRIVILEGE ESCALATION        |                  |
 
 Step 4:
 -------
@@ -74,7 +74,7 @@ Click the rocketship icon ![Add](images/at_launch_icon.png) for the
 Step 3:
 -------
 
-When prompted, we can change the scope from the web servers to a single node if desired.
+When prompted, we can change the scope for the job run, remember the playbook we limited it to 2 groups dev,qa we can run this as blank to target both groups or we could limit it to just dev, qa, node1 or node2
 
 ![Survey Prompt](images/4-survey-prompt.png)
 
@@ -118,16 +118,6 @@ Message](images/node1-site.png)
 
 ![Web Group
 Message](images/node2-site.png)
-
-Extra Credit
-============
-
-Now that you have Apache Installed, create a new playbook called
-*remove\_apache.yml* to stop and remove Apache.
-
-**Hint:** First stop the `httpd` service using the `service` module,
-then delete the `httpd` package using the `yum` module.
-Optionally, use the `file` module to delete the index page.
 
 End Result
 ==========

@@ -232,3 +232,13 @@ You are ready to automate!
           msg: "http://{{ ansible_host }}"
 ```
 <!-- {% endraw %} -->
+
+Extra Credit
+============
+
+Now that you have Apache Installed, create a new playbook called
+*remove\_apache.yml* to stop and remove Apache.
+
+**Hint:** First stop the `httpd` service using the `service` module,
+then delete the `httpd` package using the `yum` module.
+Optionally, use the `file` module to delete the index page.
