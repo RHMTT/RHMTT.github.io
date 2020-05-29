@@ -31,7 +31,7 @@ If your experience is different in schedulung these workshops, please let us kno
 - [Exercise 1-6 - Ansible roles](1-6-roles)
 - [Exercise 1-7 - Creating Workflows](1-7-workflows)
 - [Exercise 1-8 - Setting up GitLab Token](1-8-gitlab-token)
-- [Exercise 1-9 - Setting up GitLab Webhook](1-9-gitlab)
+- [Exercise 1-9 - Setting up GitLab Webhook](1-9-gitlab-webhook)
 - [Exercise 2-1 - Git Commit triggers](2-1-git-commit)
 - [Exercise 2-2 - Git merge triggers](2-2-git-commit)
 - [Exercise 3-1 - Deploy Jenkins](3-1-deploy-jenkins)

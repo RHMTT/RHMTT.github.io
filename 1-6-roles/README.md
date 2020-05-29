@@ -1,27 +1,22 @@
 Although it is possible to write a playbook in one file as we’ve done
-throughout this workshop, eventually you’ll want to reuse files and
-start to organize things.
+throughout this workshop. As we get progress we will start to see we may
+need many tasks to complete and this will become difficult to manage in 1
+playbook.
 
-Ansible Roles are the way we do this. When you create a role, you
-deconstruct your playbook into parts and those parts sit in a directory
-structure. This is considered best practice and will save you a lot of
-time in the future.
+Ansible Roles allow you split this up into many files to make it easier to
+create and debug but also easier for others to reuse your work. 
 
-For this exercise, you are going to take the playbook you just wrote and
-refactor it into a role.
+We are not going to write out a role but instead use a role and modify it where
+needed to understand the usage of roles.
 
-Let’s begin with seeing how your install-apache playbook will break down into
-a role…
-
-Section 1: Create directory structure for your new role
+Section 1: Review the role directory structure
 =======================================================
 
 Step 1:
 -------
 
-In Visual Studio Code, navigate to explorer and your *WORKSHOP_PROJECT* 
-Create a directory called **apache** by right-clicking on **WORKSHOP_PROJECT**
-and selecting *New Folder*
+In Visual Studio Code, navigate to explorer and your *workshop_project* folder there 
+is a sub directory called **apache_tomcat**
 
 ![apache\_advanced](images/6-vscode-existing-folders.png)
 
@@ -318,3 +313,4 @@ simplifying changes to variables, tasks, templates, etc.
 
 [Ansible Galaxy](https://galaxy.ansible.com) is a good repository of
 roles for use or reference.
+  
