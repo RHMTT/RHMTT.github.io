@@ -120,7 +120,6 @@ Lets also create the uninstall playbook at the same time right click and add a n
     - role: tomcat-ansible-role
 ```
 
-
 Step 7:
 ---
 
@@ -163,5 +162,95 @@ tomcat_users:
 ![tomcat prod group](images/tomcat_prod_group.png)
 
 Step 8:
-===
+---
 commit the files and push to git.
+
+
+Create Job Templates for Tomcat install and uninstall in Tower.
+===
+
+Step 1:
+---
+Back in Tower resync the project
+
+To do this, click
+**Projects** and then click the sync icon next to your project. Once
+this is complete, you can create the job template.
+
+![Project Sync](images/project-sync.png)
+
+Creating a Job Template
+=======================
+
+Step 1:
+-------
+
+Select **Templates**
+
+Step 2:
+-------
+
+Click the ![Add](images/add.png) icon, and select Job Template
+
+Step 3:
+-------
+
+Complete the form using the following values
+
+| Key         |Value                                   | Prompt on Launch |
+|-------------|----------------------------------------|------------------|
+| Name        | Install Apache Tomcat            |                  |
+| Description | Template for the apache tomcat install|                  |
+| JOB TYPE    | Run                                    |                  |
+| INVENTORY   | Student Inventory                      |                  |
+| PROJECT     | Ansible Workshop Project               |                  |
+| PLAYBOOK    | `install_tomcat.yml`                   |                  |
+| CREDENTIAL  | Student Account                        |                  |
+| LIMIT       |                                        | Checked          |
+| OPTIONS     | [*] ENABLE PRIVILEGE ESCALATION        |                  |
+
+Step 4:
+-------
+
+Click SAVE ![Save](images/at_save.png) 
+
+Step 5:
+-------
+
+Lets create another for the uninstall
+
+Click the ![Add](images/add.png) icon, and select Job Template
+
+Step 6:
+-------
+
+Complete the form using the following values
+
+| Key         |Value                                   | Prompt on Launch |
+|-------------|----------------------------------------|------------------|
+| Name        | Uninstall Apache Tomcat            |                  |
+| Description | Template for the apache tomcat uninstall |                  |
+| JOB TYPE    | Run                                    |                  |
+| INVENTORY   | Student Inventory                      |                  |
+| PROJECT     | Ansible Workshop Project               |                  |
+| PLAYBOOK    | `uninstall_tomcat.yml`                   |                  |
+| CREDENTIAL  | Student Account                        |                  |
+| LIMIT       |                                        | Checked          |
+| OPTIONS     | [*] ENABLE PRIVILEGE ESCALATION        |                  |
+
+Step 7:
+-------
+
+Click SAVE ![Save](images/at_save.png) 
+
+Running a Job Template
+======================
+
+Now that you’ve successfully created your Job Template, you are ready to
+launch it. Once you do, you will be redirected to a job screen which is
+refreshing in real time showing you the status of the job.
+
+Step 1:
+-------
+
+Select TEMPLATES
