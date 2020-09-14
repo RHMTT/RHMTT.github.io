@@ -35,7 +35,7 @@ If your experience is different in schedulung these workshops, please let us kno
 - [Exercise 2-1 - Git Commit triggers](2-1-git-commit)
 - [Exercise 2-2 - Git merge triggers](2-2-git-merge)
 - [Exercise 3-1 - Deploy Jenkins](3-1-deploy-jenkins)
-- [Exercise 3-2 - Set up Jenkins to Tower](3-2-Jenkins-setup-tower)
+- [Exercise 3-2 - Set up Jenkins to Tower](3-2-jenkins-setup-tower)
 - [Exercise 3-3 - Running Tower jobs from Jenkins](3-3-jenkins-run-tower-job)
 - [Exercise 3-4 - Adding in Tower jobs into a pipeline](3-4-jenkins-pipeline)
 
